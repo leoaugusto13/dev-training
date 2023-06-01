@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { CursosService } from './cursos.service';
 
 @Controller('cursos')
@@ -7,31 +7,30 @@ export class CursosController {
     constructor(private readonly cursosService: CursosService){}
 
     @Get()
-    findAll(@Res() response){
-        return response.status(200).send('Listagem de Cursos');
+    findAll(){
+        return this.cursosService.findAll();
     }
 
     @Get(':id')
     findOne(
         @Param('id') id: string
     ) {
-        return `Curso #${id}`;
+        return this.cursosService.findOne(id);
     }
 
     @Patch(':id')
     update(@Param('id') id: string, @Body() body){
-        return `Atualização do Curso #${id}`;
+        return this.cursosService.update(id, body)
     }
 
     @Delete(':id')
     delete(@Param('id') id: string, @Body() body){
-        return `Excluir o Curso #${id}`;
+        return this.cursosService.remove(id);
     }
 
     @Post()
-    @HttpCode(HttpStatus.NO_CONTENT)
-    create(@Body('name') body){
-            return body;
+     create(@Body() body){
+            return this.cursosService.create(body);
         }
     
 }
